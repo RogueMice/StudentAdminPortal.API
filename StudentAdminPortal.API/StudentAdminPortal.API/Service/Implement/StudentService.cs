@@ -17,10 +17,23 @@ namespace StudentAdminPortal.API.Service.Implement
             this.dbContext = dbContext;
             this.mapper = mapper;
         }
+
         public async Task<List<StudentDTO>> GetAsync()
         {
-            var result = await dbContext.Students.Include(nameof(Gender)).Include(nameof(Address)).ToListAsync();
+            var result = await dbContext.Students
+                .Include(nameof(Gender))
+                .Include(nameof(Address))
+                .ToListAsync();
             return mapper.Map<List<StudentDTO>>(result);
+        }
+
+        public async Task<StudentDTO> GetByIdAsync(Guid studentId)
+        {
+            var result = await dbContext.Students
+                .Include(nameof(Gender))
+                .Include(nameof(Address))
+                .FirstOrDefaultAsync(x => x.Id == studentId);
+            return mapper.Map<StudentDTO>(result);
         }
     }
 }

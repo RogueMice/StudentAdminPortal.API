@@ -8,6 +8,16 @@ using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("angularApplication", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyHeader()
+               .WithMethods("GET", "POST", "PUT", "DELETE")
+               .WithExposedHeaders("*");
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,6 +36,9 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
 
 var app = builder.Build();
+
+//enable CORS
+app.UseCors("angularApplication");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
