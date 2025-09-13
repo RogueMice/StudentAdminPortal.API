@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins("http://localhost:4200")
                .AllowAnyHeader()
-               .WithMethods("GET", "POST", "PUT", "DELETE")
+               .WithMethods("GET", "POST", "PUT", "DELETE","PATCH")
                .WithExposedHeaders("*");
     });
 });
@@ -31,6 +31,7 @@ builder.Services.AddDbContext<StudentAdminContext>(options =>
 
 //inject
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IGenderService, GenderService>();
 
 //add automapper
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));

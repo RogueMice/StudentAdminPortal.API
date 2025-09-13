@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentAdminPortal.API.DTO;
 using StudentAdminPortal.API.Service.Interface;
 
 namespace StudentAdminPortal.API.Controllers
@@ -29,6 +30,28 @@ namespace StudentAdminPortal.API.Controllers
             if (student == null)
                 return NotFound("Not found !");
             return Ok(student);
+        }
+
+        [HttpPatch("update_student/{studentId:guid}")]
+        public async Task<IActionResult> UpdateStudent(Guid studentId, [FromBody] UpdateStudentDTO dto)
+        {
+            var updatedStudent = await studentService.UpdateAsync(studentId, dto);
+            return Ok(new
+            {
+                messenger = "update sucessfully !",
+                result = updatedStudent
+            });
+        }
+
+        [HttpDelete("delete_student/{studentId:guid}")]
+        public async Task<IActionResult> DeleteStudent(Guid studentId)
+        {
+            var deletedStudentId = await studentService.DeleteAsync(studentId);
+            return Ok(new
+            {
+                messenger = "delete sucessfully !",
+                result = deletedStudentId
+            });
         }
     }
 }
