@@ -36,7 +36,7 @@ namespace StudentAdminPortal.API.Service.Implement
             return mapper.Map<StudentDTO>(result);
         }
 
-        public async Task<UpdateStudentDTO> UpdateAsync(Guid studentId, UpdateStudentDTO dto)
+        public async Task<StudentViewDTO> UpdateAsync(Guid studentId, StudentViewDTO dto)
         {
             var existingStudent = await dbContext.Students
                 .Include(s => s.Address)
@@ -54,7 +54,7 @@ namespace StudentAdminPortal.API.Service.Implement
             existingStudent.Address.PhysicalAddress = dto.PhysicalAddress;
             existingStudent.Address.PostalAddress = dto.PostalAddress;
             await dbContext.SaveChangesAsync();
-            return mapper.Map<UpdateStudentDTO>(existingStudent);
+            return mapper.Map<StudentViewDTO>(existingStudent);
         }
 
         public async Task<Guid> DeleteAsync(Guid studentId)
@@ -65,6 +65,39 @@ namespace StudentAdminPortal.API.Service.Implement
             dbContext.Students.Remove(existingStudent);
             await dbContext.SaveChangesAsync();
             return existingStudent.Id;
+        }
+
+        public async Task<StudentViewDTO> AddAsync(StudentViewDTO dto)
+        {
+            var student = await dbContext.Students.FirstOrDefaultAsync(x => x.Email == dto.Email);
+                if (student != null)
+                    throw new Exception("Email is existing !");
+
+            var genderExisting = await dbContext.Genders.FindAsync(dto.GenderId)
+                ?? throw new Exception($"Not found genderId {dto.GenderId}");
+
+            student = new Student
+            {
+                Id = Guid.NewGuid(),
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                DateOfBirth = dto.DateOfBirth,
+                Email = dto.Email,
+                Mobile = dto.Mobile,
+                GenderId = dto.GenderId,
+                ProfileImageUrl = string.Empty,
+                Gender = genderExisting
+            };
+            student.Address = new Address
+            {
+                Id = Guid.NewGuid(),
+                PhysicalAddress = dto.PhysicalAddress,
+                PostalAddress = dto.PostalAddress,
+                StudentId = student.Id
+            };
+            await dbContext.Students.AddAsync(student);
+            await dbContext.SaveChangesAsync();
+            return mapper.Map<StudentViewDTO>(student);
         }
     }
 }

@@ -57,6 +57,38 @@
         }
       }
     },
+    "/api/Student/add_student": {
+      "post": {
+        "tags": [
+          "Student"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentViewDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentViewDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentViewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Student/update_student/{studentId}": {
       "patch": {
         "tags": [
@@ -77,17 +109,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDTO"
+                "$ref": "#/components/schemas/StudentViewDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDTO"
+                "$ref": "#/components/schemas/StudentViewDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudentDTO"
+                "$ref": "#/components/schemas/StudentViewDTO"
               }
             }
           },
@@ -126,7 +158,7 @@
   },
   "components": {
     "schemas": {
-      "UpdateStudentDTO": {
+      "StudentViewDTO": {
         "type": "object",
         "properties": {
           "firstName": {

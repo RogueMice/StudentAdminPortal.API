@@ -9,8 +9,10 @@ namespace StudentAdminPortal.API.Service.Interface
 
         Task<StudentDTO> GetByIdAsync(Guid studentId);
 
-        Task<UpdateStudentDTO> UpdateAsync(Guid studentId, UpdateStudentDTO dto);
+        Task<StudentViewDTO> UpdateAsync(Guid studentId, StudentViewDTO dto);
 
         Task<Guid> DeleteAsync(Guid studentId);
+
+        Task<StudentViewDTO> AddAsync(StudentViewDTO dto);
     }
 }

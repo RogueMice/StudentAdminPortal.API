@@ -11,7 +11,7 @@ namespace StudentAdminPortal.API.Mapper
         {
             CreateMap<Student, StudentDTO>().ReverseMap();
 
-            CreateMap<Student, UpdateStudentDTO>()
+            CreateMap<Student, StudentViewDTO>()
             .ForMember(dest => dest.PhysicalAddress,
                 opt => opt.MapFrom(src => src.Address != null ? src.Address.PhysicalAddress : null))
             .ForMember(dest => dest.PostalAddress,

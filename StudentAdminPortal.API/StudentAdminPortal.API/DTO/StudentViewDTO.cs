@@ -1,6 +1,6 @@
 ﻿namespace StudentAdminPortal.API.DTO
 {
-    public class UpdateStudentDTO
+    public class StudentViewDTO
     {
         public string? FirstName { get; set; }
 

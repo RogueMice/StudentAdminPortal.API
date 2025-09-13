@@ -32,8 +32,19 @@ namespace StudentAdminPortal.API.Controllers
             return Ok(student);
         }
 
+        [HttpPost("add_student")]
+        public async Task<IActionResult> AddStudent([FromBody] StudentViewDTO dto)
+        {
+            var newStudent = await studentService.AddAsync(dto);
+            return Ok(new
+            {
+                messenger = "add sucessfully !",
+                result = newStudent
+            });
+        }
+
         [HttpPatch("update_student/{studentId:guid}")]
-        public async Task<IActionResult> UpdateStudent(Guid studentId, [FromBody] UpdateStudentDTO dto)
+        public async Task<IActionResult> UpdateStudent(Guid studentId, [FromBody] StudentViewDTO dto)
         {
             var updatedStudent = await studentService.UpdateAsync(studentId, dto);
             return Ok(new
