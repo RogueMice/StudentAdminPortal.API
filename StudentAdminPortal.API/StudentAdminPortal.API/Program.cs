@@ -1,9 +1,10 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using StudentAdminPortal.API.Data.Context;
 using StudentAdminPortal.API.Service.Implement;
 using StudentAdminPortal.API.Service.Interface;
-using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.AddDbContext<StudentAdminContext>(options =>
 //inject
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IGenderService, GenderService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+
 
 //add automapper
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
@@ -46,6 +49,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+//add static image
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = "/Resources"
+});
 
 app.UseHttpsRedirection();
 

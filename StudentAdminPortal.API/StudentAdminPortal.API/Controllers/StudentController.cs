@@ -43,6 +43,19 @@ namespace StudentAdminPortal.API.Controllers
             });
         }
 
+        [HttpPost("upload_image/{studentId:guid}")]
+        public async Task<IActionResult> UploadImage(Guid studentId, IFormFile file)
+        {
+            var isUploaded = await studentService.UploadImageAsync(studentId, file);
+            if (isUploaded!=null)
+                return Ok(new
+                {
+                    messenger = "upload image sucessfully !",
+                    result = isUploaded
+                });
+            return BadRequest("upload image failed !");
+        }
+
         [HttpPatch("update_student/{studentId:guid}")]
         public async Task<IActionResult> UpdateStudent(Guid studentId, [FromBody] StudentViewDTO dto)
         {

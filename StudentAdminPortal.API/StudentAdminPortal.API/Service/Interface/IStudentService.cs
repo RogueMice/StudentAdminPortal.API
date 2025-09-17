@@ -14,5 +14,7 @@ namespace StudentAdminPortal.API.Service.Interface
         Task<Guid> DeleteAsync(Guid studentId);
 
         Task<StudentViewDTO> AddAsync(StudentViewDTO dto);
+
+        Task<string> UploadImageAsync(Guid studentId, IFormFile file);
     }
 }

@@ -11,11 +11,13 @@ namespace StudentAdminPortal.API.Service.Implement
     {
         private readonly StudentAdminContext dbContext;
         private readonly IMapper mapper;
+        private readonly IImageService imageService;
 
-        public StudentService(StudentAdminContext dbContext, IMapper mapper)
+        public StudentService(StudentAdminContext dbContext, IMapper mapper, IImageService imageService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.imageService = imageService;
         }
 
         public async Task<List<StudentDTO>> GetAsync()
@@ -98,6 +100,23 @@ namespace StudentAdminPortal.API.Service.Implement
             await dbContext.Students.AddAsync(student);
             await dbContext.SaveChangesAsync();
             return mapper.Map<StudentViewDTO>(student);
+        }
+
+        public async Task<string> UploadImageAsync(Guid studentId, IFormFile file)
+        {
+            //check studentId is existing
+            var studentExisting = await dbContext.Students.FirstOrDefaultAsync(x => x.Id == studentId)
+                ?? throw new Exception($"Not found studentId {studentId}!");
+
+            //upload image
+            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+
+            var fileImagePath = await imageService.UploadAsync(file, fileName);
+            
+            studentExisting.ProfileImageUrl = fileImagePath;
+
+            await dbContext.SaveChangesAsync();
+            return fileImagePath;
         }
     }
 }
